@@ -1,0 +1,111 @@
+from news.models import *
+
+Задание 1
+
+User.objects.create_user('Иванов Иван Иваныч')
+User.objects.create_user('Петр Петрович Петров')
+
+Задание 2
+
+user_x = User.objects.get(pk=1)
+user_y = User.objects.get(pk=2)
+Author.objects.create(user_author=user_x)
+Author.objects.create(user_author=user_y)
+
+Задание 3
+
+Category.objects.create(category_new=Category.world_events)
+Category.objects.create(category_new=Category.politics)
+Category.objects.create(category_new=Category.economics)
+Category.objects.create(category_new=Category.technology)
+
+Задание 4 и 5
+
+post1 = Post.objects.create(article_or_news=Post.article,
+name_news='Почему в России цифровые сервисы лучше зарубежных, и что с ними будет дальше — мнение экспертов и экспатов',
+text_news='Россияне высоко ценят уровень цифровых сервисов и скучают по ним в эмиграции. В 2022 году Россия вошла в топ-10 стран по всему миру в рейтинге цифровизации государственного сектора. Эксперты оценили уровень развития государственных диджитал- и облачных платформ на 0.881 балла из 1, доступность электронных сервисов для граждан на 0.960 балла, развитие инновационной политики и институтов цифровизации — 0.919 балла. Такие сервисы и приложения как Госуслуги, Мой Налог, Мои документы онлайн, Пенсионный фонд и другие значительно облегчают взаимодействие граждан с, зачастую, чересчур бюрократизированными процедурами подачи документов и обработки заявлений. Благодаря грамотно разработанным приложениям с прозрачным функционалом, практически любую задачу можно решить в несколько кликов без утомительных ожиданий в очереди.',
+author_post=Author.objects.get(pk=1))
+
+post1.post_category.add(Category.objects.get(category_new='TE'))
+post1.save()
+
+post1.post_category.add(Category.objects.get(category_new='EC'))
+post1.save()
+
+post2 = Post.objects.create(article_or_news=Post.news,
+name_news='«Им это всегда сходило с рук». Как сбитый аэростат повлияет на отношения между США и Китаем',
+text_news='4 февраля над Атлантическим океаном американский истребитель F-22 сбил китайский аэростат, который, по мнению Пентагона, собирал разведывательную информацию. МИД КНР решительно осудило акцию, посчитав сбитие китайского аэростата «чрезмерной реакцией». RTVI разбирался, какую опасность воздушный шар мог представлять для США и как инцидент повлияет на конфронтацию Вашингтона и Пекина.',
+author_post=Author.objects.get(pk=2))
+
+post2.post_category.add(Category.objects.get(category_new='WE'))
+post2.save()
+
+post2.post_category.add(Category.objects.get(category_new='PO'))
+post2.save()
+
+post3 = Post.objects.create(article_or_news=Post.news,
+name_news='Роскосмос» опубликовал снимок тектонического разлома в Турции',
+text_news='«“Роскосмос” продолжает космический мониторинг последствий землетрясения на юго-востоке Турции», — говорится в сообщении в Telegram-канале. На снимке, сделанном космическим аппаратом «Канопус-В», отмечен тектонический разлом. Ранее в «Роскосмосе» сообщили, что задействовали по запросу МЧС России все силы и средства российской космической группировки дистанционного зондирования Земли, а также средства Международной хартии по космосу и крупным катастрофам для проведения мониторинга территории на юго-востоке Турции. Землетрясение магнитудой 7,7 произошло на юго-востоке Турции рано утром 6 февраля. По словам президента республики Реджепа Тайипа Эрдогана, оно стало самым сильным с 1939 года. Позже специалисты зарегистрировали три десятка афтершоков, а в середине дня — новое мощное землетрясение. Подземные толчки ощущались в центральной части страны и в следующие дни. По последним данным, жертвами трагедии стали 21 848 человек. В Турции объявили семидневный общенациональный траур, а в десяти пострадавших от катастрофы провинциях ввели чрезвычайное положение на три месяца. Землетрясение затронуло также Сирию — провинции Алеппо, Латакия, Хама и Тартус. По последним данным местного Минздрава, погибли 1347 человек, пострадали свыше двух тысяч.',
+author_post=Author.objects.get(pk=2))
+
+post3.post_category.add(Category.objects.get(category_new='WE'))
+post3.save()
+
+post3.post_category.add(Category.objects.get(category_new='TE'))
+post3.save()
+
+Задание 6
+
+Comment.objects.create(text_comment='Автор ЖЖЕТ!!!!!!', post_comment=post2, user_comment=User.objects.get(pk=1))
+
+Comment.objects.create(text_comment='Какой ужас(((((', post_comment=post3, user_comment=User.objects.get(pk=1))
+
+Comment.objects.create(text_comment='Патриотичные технологии)', post_comment=post1, user_comment=User.objects.get(pk=2))
+
+Comment.objects.create(text_comment='Так их!!!!', post_comment=post2, user_comment=User.objects.get(pk=3))
+
+Задание 7
+
+post1.like_post()
+post1.like_post()
+post1.like_post()
+post1.like_post()
+post1.like_post()
+post1.like_post()
+post3.like_post()
+post3.like_post()
+post3.like_post()
+post3.like_post()
+post3.like_post()
+post2.dislike_post()
+post2.dislike_post()
+post2.dislike_post()
+post2.dislike_post()
+
+Comment.objects.get(pk=3).dislike_comment()
+Comment.objects.get(pk=3).dislike_comment()
+Comment.objects.get(pk=3).dislike_comment()
+Comment.objects.get(pk=4).dislike_comment()
+Comment.objects.get(pk=2).like_comment()
+Comment.objects.get(pk=2).like_comment()
+Comment.objects.get(pk=1).like_comment()
+Comment.objects.get(pk=1).like_comment()
+Comment.objects.get(pk=1).like_comment()
+
+Задание 8
+Author.objects.get(pk=1).update_rating()
+Author.objects.get(pk=2).update_rating()
+
+Задание 9
+max1 = Author.objects.order_by('-user_rating')[0].user_author.username
+max2 = Author.objects.order_by('-user_rating')[0].user_rating
+print(f"Лучший пользователь {max1} : {max2} рейтинга.")
+
+Задание 10
+best = Post.objects.order_by('-rating_news')[0]
+print(best.data_time, best.author_post.user_author.username, best.rating_news, best.name_news, best.preview())
+
+Задание 11
+
+for i in best.comment_set.all():
+	print(i.data_time_comment, i.user_comment.username, i.rating_comment, i.text_comment)
