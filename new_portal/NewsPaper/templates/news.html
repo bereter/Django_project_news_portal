@@ -1,0 +1,22 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет products -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+<h1>Все новости.</h1>
+<hr>
+<table>
+ {% for post in news %}
+           <tr style="height: 100px;">
+               <td style="height: 100px;">{{ post.name_news }}</td>
+               <td style="height: 100px;">{{ post.data_time }}</td>
+               <td style="height: 100px;">{{ post.preview }}</td>
+           </tr>
+           {% endfor %}
+</table>
+{% endblock content %}

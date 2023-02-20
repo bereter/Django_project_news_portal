@@ -1,0 +1,14 @@
+{% extends 'flatpages/default.html' %}
+
+{% load words_filters %}
+
+{% block title %}
+NewsBlock
+{% endblock title %}
+
+{% block content %}
+<h1>{{ news_block.name_news|curse }}</h1>
+<h2 style="text-align: left;">{{ news_block.text_news|curse }}</h2>
+<hr>
+<h style="text-align: left;">Дата публикации:{{ news_block.data_time|date:"d E, Y" }}</h>
+{% endblock content %}
