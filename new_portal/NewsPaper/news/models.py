@@ -1,11 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
+
 
 
 class Author(models.Model):
     user_author = models.OneToOneField(User, on_delete=models.CASCADE)
     user_rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user_author)
 
     def update_rating(self):
         rating_posts_author = Post.objects.filter(author_post_id=self.pk).aggregate(rating_news=Sum('rating_news'))['rating_news']
@@ -38,6 +43,9 @@ class Category(models.Model):
 
     category_new = models.CharField(max_length=2, choices=CATEGORY_NEWS, unique=True)
 
+    def __str__(self):
+        return self.category_new
+
 
 class Post(models.Model):
     news = 'NE'
@@ -54,6 +62,9 @@ class Post(models.Model):
     rating_news = models.IntegerField(default=0)
     author_post = models.ForeignKey(Author, on_delete=models.CASCADE)
     post_category = models.ManyToManyField(Category, through='PostCategory')
+
+    def get_absolute_url(self):
+        return reverse('news_detail', args=[str(self.id)])
 
     def like_post(self):
         self.rating_news += 1
