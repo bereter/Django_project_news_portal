@@ -1,10 +1,11 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post
+from django.urls import reverse_lazy
 from datetime import datetime
 from .filters import NewsFilter
 from .forms import NewsForm
-
+from django.http import HttpResponse
 
 class NewsList(ListView):
     model = Post
@@ -68,17 +69,35 @@ class ArticlesCreate(CreateView):
 
     def form_valid(self, form):
         news = form.save(commit=False)
-        news.article_or_news = Post.article
+        news.article_or_news = Post.news
         return super().form_valid(form)
 
 
-class PostUpdate(UpdateView):
+class NewsUpdate(UpdateView):
     form_class = NewsForm
     model = Post
-    template_name = 'news_create.html'
+    queryset = Post.objects.filter(article_or_news='NE')
+    template_name = 'news_edit.html'
 
-    # def form_valid(self, form):
-    #     news = form.save(commit=False)
-    #     news.article_or_news = Post.news
-    #     return super().form_valid(form)
+
+class ArticlesUpdate(UpdateView):
+    form_class = NewsForm
+    model = Post
+    queryset = Post.objects.filter(article_or_news='AR')
+    template_name = 'articles_edit.html'
+
+
+class NewsDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('news_list')
+    queryset = Post.objects.filter(article_or_news='NE')
+
+
+class ArticlesDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('news_list')
+    queryset = Post.objects.filter(article_or_news='AR')
+
 
