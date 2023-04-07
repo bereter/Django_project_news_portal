@@ -8,7 +8,6 @@ from .forms import NewsForm
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from .forms import BaseRegisterForm
 
 class NewsList(ListView):
     model = Post
@@ -103,9 +102,4 @@ class ArticlesDelete(DeleteView):
     success_url = reverse_lazy('news_list')
     queryset = Post.objects.filter(article_or_news='AR')
 
-
-class BaseRegisterView(CreateView):
-    model = User
-    form_class = BaseRegisterForm
-    success_url = '/NewsPaper'
 

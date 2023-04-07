@@ -1,7 +1,7 @@
 from django.urls import path
 # Импортируем созданное нами представление
 from .views import NewsList, NewsBlockDetail, NewsSearch, NewsCreate, ArticlesCreate, NewsUpdate, ArticlesUpdate, \
-    NewsDelete, ArticlesDelete, BaseRegisterView
+    NewsDelete, ArticlesDelete
 
 urlpatterns = [
     path('', NewsList.as_view(), name='news_list'),
@@ -13,5 +13,4 @@ urlpatterns = [
     path('articles/<int:pk>/edit/', ArticlesUpdate.as_view(), name='articles_edit'),
     path('news/<int:pk>/delete/', NewsDelete.as_view(), name='news_delete'),
     path('articles/<int:pk>/delete/', ArticlesDelete.as_view(), name='articles_delete'),
-    path('signup/', BaseRegisterView.as_view(template_name='sign.html'), name='signup'),
 ]
