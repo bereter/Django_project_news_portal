@@ -6,6 +6,9 @@ from datetime import datetime
 from .filters import NewsFilter
 from .forms import NewsForm
 from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from .forms import BaseRegisterForm
 
 class NewsList(ListView):
     model = Post
@@ -51,7 +54,7 @@ class NewsBlockDetail(DetailView):
     context_object_name = 'news_block'
 
 
-class NewsCreate(CreateView):
+class NewsCreate(CreateView, LoginRequiredMixin):
     form_class = NewsForm
     model = Post
     template_name = 'news_create.html'
@@ -62,7 +65,7 @@ class NewsCreate(CreateView):
         return super().form_valid(form)
 
 
-class ArticlesCreate(CreateView):
+class ArticlesCreate(CreateView, LoginRequiredMixin):
     form_class = NewsForm
     model = Post
     template_name = 'articles_create.html'
@@ -73,14 +76,14 @@ class ArticlesCreate(CreateView):
         return super().form_valid(form)
 
 
-class NewsUpdate(UpdateView):
+class NewsUpdate(UpdateView, LoginRequiredMixin):
     form_class = NewsForm
     model = Post
     queryset = Post.objects.filter(article_or_news='NE')
     template_name = 'news_edit.html'
 
 
-class ArticlesUpdate(UpdateView):
+class ArticlesUpdate(UpdateView, LoginRequiredMixin):
     form_class = NewsForm
     model = Post
     queryset = Post.objects.filter(article_or_news='AR')
@@ -100,4 +103,9 @@ class ArticlesDelete(DeleteView):
     success_url = reverse_lazy('news_list')
     queryset = Post.objects.filter(article_or_news='AR')
 
+
+class BaseRegisterView(CreateView):
+    model = User
+    form_class = BaseRegisterForm
+    success_url = '/NewsPaper'
 
