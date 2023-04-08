@@ -136,15 +136,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 
 LOGIN_URL = '/accounts/login/' # Здесь адрес регистрации!!!
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/NewsPaper/'
+LOGOUT_REDIRECT_URL = '/NewsPaper/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'

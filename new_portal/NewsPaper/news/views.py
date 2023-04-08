@@ -6,8 +6,21 @@ from datetime import datetime
 from .filters import NewsFilter
 from .forms import NewsForm
 from django.http import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    premium_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        premium_group.user_set.add(user)
+    return redirect('/NewsPaper/')
+
 
 class NewsList(ListView):
     model = Post
@@ -24,6 +37,7 @@ class NewsList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # context['time_now'] = datetime.utcnow()
+        context['is_not_premium'] = not self.request.user.groups.filter(name='authors').exists()
         context['filterset'] = self.filterset
         return context
 
@@ -53,10 +67,11 @@ class NewsBlockDetail(DetailView):
     context_object_name = 'news_block'
 
 
-class NewsCreate(CreateView, LoginRequiredMixin):
+class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     template_name = 'news_create.html'
+    permission_required = ('news.add_post', )
 
     def form_valid(self, form):
         news = form.save(commit=False)
@@ -64,10 +79,11 @@ class NewsCreate(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class ArticlesCreate(CreateView, LoginRequiredMixin):
+class ArticlesCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     template_name = 'articles_create.html'
+    permission_required = ('news.add_post', )
 
     def form_valid(self, form):
         news = form.save(commit=False)
@@ -75,31 +91,35 @@ class ArticlesCreate(CreateView, LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class NewsUpdate(UpdateView, LoginRequiredMixin):
+class NewsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     queryset = Post.objects.filter(article_or_news='NE')
     template_name = 'news_edit.html'
+    permission_required = ('news.change_post', )
 
 
-class ArticlesUpdate(UpdateView, LoginRequiredMixin):
+class ArticlesUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     queryset = Post.objects.filter(article_or_news='AR')
     template_name = 'articles_edit.html'
+    permission_required = ('news.change_post', )
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(PermissionRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('news_list')
     queryset = Post.objects.filter(article_or_news='NE')
+    permission_required = ('news.delete_post', )
 
 
-class ArticlesDelete(DeleteView):
+class ArticlesDelete(PermissionRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('news_list')
     queryset = Post.objects.filter(article_or_news='AR')
+    permission_required = ('news.delete_post', )
 
 

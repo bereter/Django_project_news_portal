@@ -22,6 +22,10 @@ News
            {% endfor %}
 </table>
 
+{% if is_not_premium %}
+<button> <a href="upgrade/"> Стать автором новостного портала</a> </button>
+{% endif %}
+
 {% if page_obj.has_previous %}
        <a href="?page=1">1</a>
        {% if page_obj.previous_page_number != 1 %}
