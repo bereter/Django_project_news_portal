@@ -4,7 +4,6 @@ from django.db.models import Sum
 from django.urls import reverse
 
 
-
 class Author(models.Model):
     user_author = models.OneToOneField(User, on_delete=models.CASCADE)
     user_rating = models.IntegerField(default=0)
@@ -13,13 +12,14 @@ class Author(models.Model):
         return str(self.user_author)
 
     def update_rating(self):
-        rating_posts_author = Post.objects.filter(author_post_id=self.pk).aggregate(rating_news=Sum('rating_news'))['rating_news']
+        rating_posts_author = Post.objects.filter(author_post_id=self.pk).aggregate(rating_news=Sum('rating_news'))[
+            'rating_news']
         rating_comments_author = \
-        Comment.objects.filter(user_comment_id=self.pk).aggregate(rating_comment=Sum('rating_comment'))[
-            'rating_comment']
+            Comment.objects.filter(user_comment_id=self.pk).aggregate(rating_comment=Sum('rating_comment'))[
+                'rating_comment']
         rating_comments_posts = \
-        Comment.objects.filter(post_comment__author_post=self.pk).aggregate(rating_comment=Sum('rating_comment'))[
-            'rating_comment']
+            Comment.objects.filter(post_comment__author_post=self.pk).aggregate(rating_comment=Sum('rating_comment'))[
+                'rating_comment']
         self.user_rating = rating_posts_author * 3 + rating_comments_author + rating_comments_posts
         self.save()
 
@@ -42,6 +42,7 @@ class Category(models.Model):
     ]
 
     category_new = models.CharField(max_length=2, choices=CATEGORY_NEWS, unique=True)
+    subscribers = models.ManyToManyField(User, through='AuthorCategory')
 
     def __str__(self):
         return self.category_new
@@ -80,6 +81,11 @@ class Post(models.Model):
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
+class AuthorCategory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 

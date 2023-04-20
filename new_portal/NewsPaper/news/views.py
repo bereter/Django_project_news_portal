@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Category
 from django.urls import reverse_lazy
 from datetime import datetime
 from .filters import NewsFilter
@@ -20,6 +20,13 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='authors').exists():
         premium_group.user_set.add(user)
     return redirect('/NewsPaper/')
+
+
+@login_required
+def subscription_me(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.add(user)
 
 
 class NewsList(ListView):
@@ -65,6 +72,11 @@ class NewsBlockDetail(DetailView):
     model = Post
     template_name = 'news_block.html'
     context_object_name = 'news_block'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_subscription'] = self.request.user
+        return context
 
 
 class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):

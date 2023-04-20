@@ -12,3 +12,7 @@ NewsBlock
 <hr>
 <h style="text-align: left;">Дата публикации:{{ news_block.data_time|date:"d E, Y" }}</h>
 {% endblock content %}
+
+{% if is_not_subscription %}
+<button> <a href="upgrade_subscription/"> Подписаться на категорию </a> </button>
+{% endif %}
