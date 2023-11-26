@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Уведомление</title>
+</head>
+<body>
+    <h2>Здравствуйте! Новые статьи</h2>
+    {% for post in posts %}
+    <a>{{ post.title }}</a>
+    <a href="{{ link }}">статья</a>
+    {% endfor %}
+</body>
+</html>

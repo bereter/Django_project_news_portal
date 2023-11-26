@@ -23,10 +23,12 @@ def upgrade_me(request):
 
 
 @login_required
-def subscription_me(request, pk):
+def subscribe(request, pk):
     user = request.user
     category = Category.objects.get(id=pk)
+
     category.subscribers.add(user)
+    return redirect('/NewsPaper/')
 
 
 class NewsList(ListView):

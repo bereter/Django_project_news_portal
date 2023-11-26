@@ -42,7 +42,7 @@ class Category(models.Model):
     ]
 
     category_new = models.CharField(max_length=2, choices=CATEGORY_NEWS, unique=True)
-    subscribers = models.ManyToManyField(User, through='AuthorCategory')
+    subscribers = models.ManyToManyField(User, through='AuthorCategory', related_name='categories')
 
     def __str__(self):
         return self.category_new

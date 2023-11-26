@@ -18,6 +18,11 @@ News
                <td style="height: 100px;">{{ post.name_news }}</td>
                <td style="height: 100px;">{{ post.data_time }}</td>
                <td style="height: 100px;">{{ post.preview }}</td>
+               <td style="height: 100px;">
+                   {% for category in post.post_category.all %}
+                   <a href="categories/{{ category.id }}/" >Подписка на категорию {{ category }}<br></a>
+                   {% endfor %}
+               </td>
            </tr>
            {% endfor %}
 </table>
