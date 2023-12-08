@@ -168,9 +168,8 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_EMAIL')
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
-CELERY_BROKER_URL = f'redis://:{os.getenv("PAS_RED")}@redis-16925.c281.us-east-1-2.ec2.cloud.redislabs.com:16925'
-CELERY_RESULT_BACKEND = f'redis://:{os.getenv("PAS_RED")}@redis-16925.c281.us-east-1-2.ec2.cloud.redislabs.com:16925'
-# CELERY_TASK_TRACK_STARTED = True
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
