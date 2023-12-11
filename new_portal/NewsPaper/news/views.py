@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
 
 @login_required
@@ -80,6 +81,15 @@ class NewsBlockDetail(DetailView):
         context['is_not_subscription'] = self.request.user
         return context
 
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'product-{self.kwargs["pk"]}', obj)
+
+        return obj
+
 
 class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = NewsForm
@@ -101,7 +111,7 @@ class ArticlesCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
     def form_valid(self, form):
         news = form.save(commit=False)
-        news.article_or_news = Post.news
+        news.article_or_news = 'AR'
         return super().form_valid(form)
 
 

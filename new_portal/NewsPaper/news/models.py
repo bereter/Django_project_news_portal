@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.urls import reverse
+from django.core.cache import cache
 
 
 class Author(models.Model):
@@ -9,7 +10,7 @@ class Author(models.Model):
     user_rating = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.user_author)
+        return f'{self.user_author}'
 
     def update_rating(self):
         rating_posts_author = Post.objects.filter(author_post_id=self.pk).aggregate(rating_news=Sum('rating_news'))[
@@ -64,6 +65,9 @@ class Post(models.Model):
     author_post = models.ForeignKey(Author, on_delete=models.CASCADE)
     post_category = models.ManyToManyField(Category, through='PostCategory')
 
+    def __str__(self):
+        return f'{self.name_news} : {self.article_or_news}'
+
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])
 
@@ -77,6 +81,10 @@ class Post(models.Model):
 
     def preview(self):
         return self.text_news[0:124] + '...'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.delete(f'post-{self.pk}')
 
 
 class PostCategory(models.Model):
@@ -103,3 +111,6 @@ class Comment(models.Model):
     def dislike_comment(self):
         self.rating_comment -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.post_comment} : {self.user_comment}'
