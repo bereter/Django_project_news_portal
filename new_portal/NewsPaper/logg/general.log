@@ -1,0 +1,10 @@
+2024-01-15 21:38:49,439 INFO autoreload Watching for file changes with StatReloader
+2024-01-15 21:38:51,078 WARNING log Not Found: /
+2024-01-15 21:38:51,078 WARNING basehttp "GET / HTTP/1.1" 404 179
+2024-01-15 21:38:57,941 INFO basehttp "GET /NewsPaper/categories/1/ HTTP/1.1" 302 0
+2024-01-15 21:38:58,002 INFO basehttp "GET /accounts/login/?next=/NewsPaper/categories/1/ HTTP/1.1" 200 3382
+2024-01-15 21:39:14,119 WARNING log Not Found: /api/v1/post_list/
+2024-01-15 21:39:14,120 WARNING basehttp "GET /api/v1/post_list/ HTTP/1.1" 404 179
+2024-01-15 21:39:21,330 INFO basehttp "GET /NewsPaper/ HTTP/1.1" 200 6382
+2024-01-15 21:39:24,937 INFO basehttp "GET /NewsPaper/1 HTTP/1.1" 200 3418
+2024-01-15 21:40:09,149 INFO basehttp "POST /accounts/login/ HTTP/1.1" 200 3476

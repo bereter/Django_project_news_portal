@@ -180,3 +180,96 @@ CACHES = {
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
     }
 }
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style': '{',
+    'formatters': {
+        'security_form': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s'
+        },
+        'general_form': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s'
+        },
+        'error_form': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s'
+        },
+        'mail_form': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s'
+        }
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_level': {
+            '()': 'logg.filters_log.ContextFilter',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true', 'require_level'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'error_form',
+        },
+        'general': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'general_form',
+            'filename': r'logg\general.log',
+
+        },
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': r'logg\errors.log',
+            'formatter': 'error_form',
+        },
+        'security': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': r'logg\security.log',
+            'formatter': 'security_form',
+
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'mail_form',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'general'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'errors'],
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['mail_admins', 'errors'],
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'propagate': True,
+        }
+    }
+}
